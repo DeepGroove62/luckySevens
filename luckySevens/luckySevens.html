@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lucky Sevens</title>
+		<script>
+			var startingBet;
+			var money;
+			var dice1;
+			var dice2;
+			var dice;
+			var rollTally;
+			var maxMoney;
+			var maxTally;
+			function initializeValues() {
+				money=0;
+				dice1=0;
+				dice2=0;
+				dice=0;
+				rollTally=0;
+				maxMoney=0;
+				maxTally=1;
+			}
+			function rollDice() {
+			  return Math.ceil(Math.random() * (1 + 6 - 1))
+			}
+			function onSubmit () {
+			  startingBet = document.getElementById("bet").value
+				if (startingBet < 0) {
+			    alert('Starting bet must be more than 0!')
+					return
+			  }
+				money = startingBet
+				maxMoney = money
+				while (money > 0) {
+					dice1 = rollDice()
+					dice2= rollDice()
+					dice = dice1 + dice2
+					rollTally++;
+					if (dice === 7) {
+						money = parseInt(money, 10) + 4
+					} else {
+						money = parseInt(money, 10) - 1
+					}
+					if (money > maxMoney) {
+						maxMoney = money
+						maxTally = rollTally
+					}
+				}
+				// print results
+				document.getElementById('results-starting-bet').innerHTML = startingBet;
+				document.getElementById('results-total-rolls').innerHTML = rollTally;
+				document.getElementById('results-highest-amount-won').innerHTML = maxMoney;
+				document.getElementById('results-roll-count-at-highest-amount-won').innerHTML = maxTally;
+				return false
+			}
+			function playAgain() {
+				initializeValues()
+				onSubmit()
+			}
+			initializeValues()
+		</script>
+	</head>
+	<body>
+		<h1>Lucky Sevens</h1>
+		<form onSubmit="return onSubmit(this)">
+			<fieldset>
+				<label for="bet">Starting Bet:</label>
+				<input type="number" id="bet" name="bet"><br>
+				<button type="submit">Play</button>
+			</fieldset>
+		</form>
+		<div id="results">
+			<table>
+				<tbody>
+					<tr>
+						<td>Starting bet</td>
+						<td id="results-starting-bet"></td>
+					</tr>
+					<tr>
+						<td>Total rolls before going broke</td>
+						<td id="results-total-rolls"></td>
+					</tr>
+					<tr>
+						<td>Highest Amount Won</td>
+						<td id="results-highest-amount-won"></td>
+					</tr>
+					<tr>
+						<td>Roll count at Highest Amount Won</td>
+						<td id="results-roll-count-at-highest-amount-won"></td>
+					</tr>
+				</tbody>
+			</table>
+			<button onClick="playAgain()">Play Again</button>
+		</div>
+	</body>
+</html>
